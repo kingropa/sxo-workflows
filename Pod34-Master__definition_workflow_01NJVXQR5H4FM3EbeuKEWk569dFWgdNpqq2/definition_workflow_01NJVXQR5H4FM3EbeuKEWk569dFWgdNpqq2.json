@@ -1,0 +1,319 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01NJVXQR5H4FM3EbeuKEWk569dFWgdNpqq2",
+    "name": "Pod34-Master",
+    "title": "Pod34-Master",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "results_loop",
+          "type": "datatype.string",
+          "is_required": false,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01NJXNNWJ4E7Q2iXx5satpt2IHiPwMTxEiV",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "input",
+          "name": "name",
+          "type": "datatype.string",
+          "is_required": true,
+          "is_invisible": false
+        },
+        "unique_name": "variable_workflow_01NJW22FC7AU81ifESZ1jh39V741ISUAxsF",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "test",
+      "display_name": "Pod34-Master",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "target_id": "definition_target_01NJUNLQEML5O1xEIY1bEVMolqBuohZFEKD",
+        "execute_on_workflow_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01NJW11CGDZJZ5JuM2zQOuApJFwhgaL5ifi",
+        "name": "Pod34-HTTP Atomic",
+        "title": "Pod34-HTTP Atomic",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "display_name": "Pod34-HTTP Atomic",
+          "input": {
+            "variable_workflow_01NJUV38M1KDY1ulysuFlnl7uL5XpHzxpLu": "users"
+          },
+          "runtime_user": {
+            "target_default": true
+          },
+          "target": {
+            "execute_on_this_target": true,
+            "target_id": "definition_target_01NJUNLQEML5O1xEIY1bEVMolqBuohZFEKD",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01NJUSIW408AU0EiygYj7EPnt8vPunNKQu6"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01NJW2GKKGMUZ4VvSRXzHRrbgz2cAbdd1vf",
+        "name": "Read Table from JSON",
+        "title": "Read Table from JSON",
+        "type": "corejava.read_table_from_json",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Read Table from JSON",
+          "input_json": "$activity.definition_activity_01NJW11CGDZJZ5JuM2zQOuApJFwhgaL5ifi.output.variable_workflow_01NJVDFYP0KO21VGHrHAPTXokw35ACaIBhd$",
+          "jsonpath_query": "$",
+          "persist_output": true,
+          "populate_columns": false,
+          "skip_execution": false,
+          "table_columns": [
+            {
+              "column_name": "name",
+              "column_type": "string"
+            },
+            {
+              "column_name": "username",
+              "column_type": "string"
+            }
+          ]
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01NJXBUU1ZBF144XDBcIZU1d6nv05L60RY5",
+        "name": "For Each",
+        "title": "For Each",
+        "type": "logic.for_each",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "For Each",
+          "skip_execution": false,
+          "source_array": "$activity.definition_activity_01NJW2GKKGMUZ4VvSRXzHRrbgz2cAbdd1vf.output.read_table_from_json$"
+        },
+        "object_type": "definition_activity",
+        "actions": [
+          {
+            "unique_name": "definition_activity_01NJXCANULR5T2Qqps9qjQ2ouJAfkb0RUVp",
+            "name": "Condition Block",
+            "title": "If Name Found?",
+            "type": "logic.if_else",
+            "base_type": "activity",
+            "properties": {
+              "continue_on_failure": false,
+              "display_name": "If Name Found?",
+              "skip_execution": false
+            },
+            "object_type": "definition_activity",
+            "blocks": [
+              {
+                "unique_name": "definition_activity_01NJXCBE5RYLV1fURnGIoneFGS1rOhpEOCC",
+                "name": "Condition Branch",
+                "title": "THEN",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": "$activity.definition_activity_01NJXBUU1ZBF144XDBcIZU1d6nv05L60RY5.input.source_array[@].name$",
+                    "operator": "eq",
+                    "right_operand": "Map the variable to the input $activity.definition_activity_01NJXBUU1ZBF144XDBcIZU1d6nv05L60RY5.input.source_array[@].name$."
+                  },
+                  "continue_on_failure": true,
+                  "display_name": "THEN",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_01NJXO6VC4HIL1fUEUyNxLm9ii6Uo4TgRtY",
+                    "name": "Set Variables",
+                    "title": "Set Variables",
+                    "type": "core.set_multiple_variables",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Set Variables",
+                      "skip_execution": false,
+                      "variables_to_update": [
+                        {
+                          "variable_to_update": "$workflow.definition_workflow_01NJVXQR5H4FM3EbeuKEWk569dFWgdNpqq2.local.variable_workflow_01NJXNNWJ4E7Q2iXx5satpt2IHiPwMTxEiV$",
+                          "variable_value_new": "We found $activity.definition_activity_01NJXBUU1ZBF144XDBcIZU1d6nv05L60RY5.input.source_array[@].name$ by their username."
+                        }
+                      ]
+                    },
+                    "object_type": "definition_activity"
+                  },
+                  {
+                    "unique_name": "definition_activity_01NKLCDQZG5NS68Cr6IgaLzQaucltSIsPDN",
+                    "name": "Write File",
+                    "title": "Write File",
+                    "type": "terminal.write_file",
+                    "base_type": "activity",
+                    "properties": {
+                      "action_timeout": 180,
+                      "content": "$workflow.definition_workflow_01NJVXQR5H4FM3EbeuKEWk569dFWgdNpqq2.local.variable_workflow_01NJXNNWJ4E7Q2iXx5satpt2IHiPwMTxEiV$",
+                      "continue_on_failure": false,
+                      "display_name": "Write File",
+                      "encoding": "utf-8",
+                      "file_name": "Pod34-basic-workflow-results.txt",
+                      "options": "append",
+                      "runtime_user": {
+                        "override_target_runtime_user": false,
+                        "target_default": true
+                      },
+                      "skip_execution": false,
+                      "target": {
+                        "override_workflow_target": true,
+                        "target_id": "definition_target_01MPT315QSRB95qiHsdqdynSVPq7PObx21M"
+                      }
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              },
+              {
+                "unique_name": "definition_activity_01NJXCBEWCNKI7AQje6W34ELgg1OtwTFezM",
+                "name": "Condition Branch",
+                "title": "ELSE",
+                "type": "logic.condition_block",
+                "base_type": "activity",
+                "properties": {
+                  "condition": {
+                    "left_operand": "$activity.definition_activity_01NJXBUU1ZBF144XDBcIZU1d6nv05L60RY5.input.source_array[@].name$",
+                    "operator": "ne",
+                    "right_operand": "Map the variable to the input $activity.definition_activity_01NJXBUU1ZBF144XDBcIZU1d6nv05L60RY5.input.source_array[@].name$."
+                  },
+                  "continue_on_failure": false,
+                  "display_name": "ELSE",
+                  "skip_execution": false
+                },
+                "object_type": "definition_activity",
+                "actions": [
+                  {
+                    "unique_name": "definition_activity_01NJXLLE6ONNI4hiwuJfPliC61XlCKVVzr8",
+                    "name": "Continue",
+                    "title": "Continue",
+                    "type": "logic.continue",
+                    "base_type": "activity",
+                    "properties": {
+                      "continue_on_failure": false,
+                      "display_name": "Continue",
+                      "skip_execution": false
+                    },
+                    "object_type": "definition_activity"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "categories": [
+      "category_01NJUETXFYYRA0jTtiwzNkzBXxClgrX1hHF"
+    ]
+  },
+  "categories": {
+    "category_01NJUETXFYYRA0jTtiwzNkzBXxClgrX1hHF": {
+      "unique_name": "category_01NJUETXFYYRA0jTtiwzNkzBXxClgrX1hHF",
+      "name": "Pod34",
+      "title": "Pod34",
+      "type": "basic.category",
+      "base_type": "category",
+      "category_type": "custom",
+      "object_type": "category"
+    }
+  },
+  "targets": {
+    "definition_target_01MPT315QSRB95qiHsdqdynSVPq7PObx21M": {
+      "unique_name": "definition_target_01MPT315QSRB95qiHsdqdynSVPq7PObx21M",
+      "name": "Linux Box",
+      "title": "Linux Box",
+      "type": "terminal.unix_linux_endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "bash_shell": "/bin/bash",
+        "default_runtime_user_id": "definition_runtime_user_01MPT2ZMA0B1K3ysSncQpGzy0U3F6b4vwck",
+        "display_name": "Linux Box",
+        "host": "54.202.18.163",
+        "port": 22
+      }
+    },
+    "definition_target_01NJUNLQEML5O1xEIY1bEVMolqBuohZFEKD": {
+      "unique_name": "definition_target_01NJUNLQEML5O1xEIY1bEVMolqBuohZFEKD",
+      "name": "Pod34-HTTP Target",
+      "title": "Pod34-HTTP Target",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "default_runtime_user_id": "definition_runtime_user_01NJUL16HXCND3BPqbzhQBtbgFcNwcmXISa",
+        "disable_certificate_validation": true,
+        "display_name": "Pod34-HTTP Target",
+        "host": "jsonplaceholder.typicode.com",
+        "ignore_proxy": false,
+        "no_runtime_user": false,
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "runtime_users": {
+    "definition_runtime_user_01MPT2ZMA0B1K3ysSncQpGzy0U3F6b4vwck": {
+      "unique_name": "definition_runtime_user_01MPT2ZMA0B1K3ysSncQpGzy0U3F6b4vwck",
+      "name": "Linux Account Keys",
+      "title": "Linux Account Keys",
+      "type": "runtime_user.terminal_password_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "display_name": "Linux Account Keys",
+        "password": "*****",
+        "user": "*****"
+      }
+    },
+    "definition_runtime_user_01NJUL16HXCND3BPqbzhQBtbgFcNwcmXISa": {
+      "unique_name": "definition_runtime_user_01NJUL16HXCND3BPqbzhQBtbgFcNwcmXISa",
+      "name": "Pod34-HTTP Account",
+      "title": "Pod34-HTTP Account",
+      "type": "runtime_user.web-service_basic_credentials",
+      "base_type": "runtime_user",
+      "object_type": "definition_runtime_user",
+      "properties": {
+        "auth_option": "*****",
+        "basic_password": "*****",
+        "basic_username": "*****",
+        "display_name": "Pod34-HTTP Account"
+      }
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01NJUSIW408AU0EiygYj7EPnt8vPunNKQu6"
+  ]
+}
